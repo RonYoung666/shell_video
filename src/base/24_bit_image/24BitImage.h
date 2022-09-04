@@ -58,6 +58,28 @@ void FreeImage(image_t **ppImage);
 
 /*******************************************************************
 * NAME
+*     ResizeImage
+* DESCRIPTION
+*     Change image size
+*     Before you call this function, you need to
+*         1. Allocate memory for pFromImage and pToImage
+*         2. Set "From size" in pFromImage and set "To size" in pToImage
+* INPUTS
+*     pFromImage: The iamge object nedd to be resized
+* OUTPUTS
+*     pToImage: Buffer to store resize result
+* RETURN
+*      0: Resize succeed
+*     -1: Parameter error
+*     -2: "From size" error
+*     -3: "To size" error
+* AUTHOR
+*     Ron Young @2022-09-03
+*******************************************************************/
+int ResizeImage(image_t *pFromImage, image_t *pToImage);
+
+/*******************************************************************
+* NAME
 *     CalcImageStringSize
 * DESCRIPTION
 *     Calculate the size of the image string

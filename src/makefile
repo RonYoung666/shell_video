@@ -1,4 +1,4 @@
-all:
+all:clean
 	@cd base;make
 	@cd test;make
 

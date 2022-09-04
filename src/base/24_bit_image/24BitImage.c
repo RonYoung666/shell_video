@@ -54,6 +54,52 @@ image_t *MallocImage(int nRow, int nCol) {
 
 /*******************************************************************
 * NAME
+*     ResizeImage
+* DESCRIPTION
+*     Change image size
+*     Before you call this function, you need to
+*         1. Allocate memory for pFromImage and pToImage
+*         2. Set "From size" in pFromImage and set "To size" in pToImage
+* INPUTS
+*     pFromImage: The iamge object nedd to be resized
+* OUTPUTS
+*     pToImage: Buffer to store resize result
+* RETURN
+*      0: Resize succeed
+*     -1: Parameter error
+*     -2: "From size" error
+*     -3: "To size" error
+* AUTHOR
+*     Ron Young @2022-09-04
+*******************************************************************/
+int ResizeImage(image_t *pFromImage, image_t *pToImage) {
+    if (NULL == pFromImage || NULL == pToImage) {
+        return -1;
+    }
+
+    if (pFromImage->nRow <= 0 || pFromImage->nCol <= 0) {
+        return -2;
+    }
+
+    if (pToImage->nRow <= 0 || pToImage->nCol <= 0) {
+        return -3;
+    }
+
+    int nFromRow, nFromCol;
+    int nToRow, nToCol;
+    for (nToRow = 0; nToRow < pToImage->nRow; nToRow++) {
+        for (nToCol = 0; nToCol < pToImage->nCol; nToCol++) {
+            nFromRow = nToRow * pFromImage->nRow / pToImage->nRow;
+            nFromCol = nToCol * pFromImage->nCol / pToImage->nCol;
+            pToImage->ppPixels[nToRow][nToCol] = pFromImage->ppPixels[nFromRow][nFromCol];
+        }
+    }
+
+    return 0;
+}
+
+/*******************************************************************
+* NAME
 *     FreeImage
 * DESCRIPTION
 *     Free a 24 bit image object's memory
