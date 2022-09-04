@@ -1,9 +1,7 @@
 all:
-	gcc -c -g 24BitImage.c
-	gcc -c -g test.c
-	gcc 24BitImage.o test.o -o test
-	rm -f *.o
+	@cd base;make
+	@cd test;make
 
 clean:
-	rm -f *.o
-	rm -f test
+	@cd base;make uninstall
+	@cd test;make uninstall
