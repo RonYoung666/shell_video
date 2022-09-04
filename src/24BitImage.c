@@ -106,8 +106,8 @@ int CalcImageStringSize(image_t *pImage) {
         return 0;
     }
 
-    /*     |<----- Row Num ----->|     |<---------- Pixels ---------->|   \n   |< Recover char >|  \0 */
-    return ((pImage->nRow + 1) / 2) * (pImage->nCol * COLORED_CHAR_SIZE + 1) + COLORED_CHAR_SIZE + 1;
+    /*     |<----- Row Num ----->|     |<---------- Pixels ---------->|   |< Recover char >|  \n   \0 */
+    return ((pImage->nRow + 1) / 2) * (pImage->nCol * COLORED_CHAR_SIZE + COLORED_CHAR_SIZE + 1) + 1;
 }
 
 /*******************************************************************
@@ -168,12 +168,11 @@ int Image2String(image_t *pImage, char *pStrBuf, int nStrBufSize) {
     for (nRow = 0; nRow < pImage->nRow; nRow += 2) { /* Convert two vertically adjacent pixels to one colored character, so "nRow += 2" each time */
         for (nCol = 0; nCol < pImage->nCol; nCol++) {
             pPix1 = &pImage->ppPixels[nRow][nCol];
-            pPix2 = nRow + 1 < pImage->nCol ? &pImage->ppPixels[nRow + 1][nCol] : &stBlackPix;
+            pPix2 = nRow + 1 < pImage->nRow ? &pImage->ppPixels[nRow + 1][nCol] : &stBlackPix;
             nOffset += TwoPixel2String(pPix1, pPix2, pStrBuf + nOffset, nStrBufSize - nOffset);
         }
-        nOffset += snprintf(pStrBuf + nOffset, nStrBufSize - nOffset, "\n");
+        nOffset += snprintf(pStrBuf + nOffset, nStrBufSize - nOffset, "\x1b[0m\n"); /* Recover color and newline */
     }
-    nOffset += snprintf(pStrBuf + nOffset, nStrBufSize - nOffset, "\x1b[0m");
 
     return nOffset;
 }

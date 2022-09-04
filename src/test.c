@@ -66,7 +66,7 @@ void DisplayBaseImage() {
     return;
 }
 
-void LoopDisplayRandom(int nRow, int nCol, int nLoopTimes, int nUSleepTime) {
+void LoopDisplayRandom(int nRow, int nCol, int nLoopTimes, int nFps) {
     image_t *pImage = MallocImage(nRow, nCol);
     if (NULL == pImage) {
         printf("MallocImage(nRow, nCol) Error\n");
@@ -103,7 +103,7 @@ void LoopDisplayRandom(int nRow, int nCol, int nLoopTimes, int nUSleepTime) {
 
         Image2String(pImage, pStrBuf, nStrBufSize);
         printf("%s", pStrBuf);
-        usleep(nUSleepTime);
+        usleep(1000 * 1000 / nFps);
     }
 
     FreeImage(&pImage);
@@ -113,13 +113,26 @@ void LoopDisplayRandom(int nRow, int nCol, int nLoopTimes, int nUSleepTime) {
 }
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
     signal(SIGINT,sig_handler);
+
+    if (argc < 5) {
+        printf("Usage: %s <Row> <Col> <frame num> <fps>\n", argv[0]);
+        return 0;
+    }
+
+    int nRow   = atoi(argv[1]);
+    int nCol   = atoi(argv[2]);
+    int nFrame = atoi(argv[3]);
+    int nFps   = atoi(argv[4]);
+    printf("nRow   = %d\n", nRow);
+    printf("nCol   = %d\n", nCol);
+    printf("nFrame = %d\n", nFrame);
+    printf("nFps   = %d\n", nFps);
+
     //DisplayBaseImage();
 
-    int nRow = 50;
-    int nCol = 50;
-    LoopDisplayRandom(nRow, nCol, 250, 1000 * 40);
+    LoopDisplayRandom(nRow, nCol, nFrame, nFps);
 
     return 0;
 }

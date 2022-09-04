@@ -106,7 +106,6 @@ int Image2String(image_t *pImage, char *pStrBuf, int nStrBufSize);
 *******************************************************************/
 void DisplayImage(image_t *pImage);
 
-
 #ifdef __cplusplus
 }
 #endif
